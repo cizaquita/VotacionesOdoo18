@@ -4,6 +4,8 @@
     'version': '1.0',
     'category': 'Human Resources',
     'sequence': 200,
+    'price': 49.99,
+    'currency': 'EUR',
     'summary': 'Voting system for UNIACME',
     'description': """
                         This module manages voting workflow
