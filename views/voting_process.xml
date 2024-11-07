@@ -1,0 +1,105 @@
+<odoo>
+    <record id="view_voting_process_list" model="ir.ui.view">
+        <field name="name">uniacme_votes.voting_process.list</field>
+        <field name="model">uniacme_votes.voting_process</field>
+        <field name="arch" type="xml">
+            <list string="Procesos de Votación" sample="1" 
+            decoration-info="voting_process_status == 'draft'" 
+            decoration-success="voting_process_status == 'in_progress'"
+            decoration-danger="voting_process_status == 'closed'" >
+                <field name="name"/>
+                <field name="voting_start"/>
+                <field name="voting_end"/>
+                <field name="voting_process_status"/>
+            </list>
+        </field>
+    </record>
+    
+    <record id="action_start_multiple_votings" model="ir.actions.server">
+        <field name="name">Iniciar múltiples votaciones</field>
+        <field name="model_id" ref="model_uniacme_votes_voting_process"/>
+        <field name="state">code</field>
+        <field name="code">
+            if env.context.get('active_ids'):
+                env['uniacme_votes.voting_process'].start_multiple_votings(env.context['active_ids'])
+        </field>
+    </record>
+    
+    <record id="view_voting_process_list_button" model="ir.ui.view">
+        <field name="name">uniacme_votes.voting_process.list.button</field>
+        <field name="model">uniacme_votes.voting_process</field>
+        <field name="inherit_id" ref="view_voting_process_list"/>
+        <field name="arch" type="xml">
+            <list>
+                <header>
+                    <button name="%(action_start_multiple_votings)d" 
+                        string="Iniciar Votaciones Seleccionadas" 
+                        type="action" 
+                        class="btn-primary" />
+                </header>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_voting_process_form" model="ir.ui.view">
+        <field name="name">uniacme_votes.voting_process.form</field>
+        <field name="model">uniacme_votes.voting_process</field>
+        <field name="arch" type="xml">
+            <form string="Proceso de Votación">
+                <header>
+                    <button name="action_start_voting" type="object" string="Iniciar Votación" invisible="voting_process_status in ('in_progress', 'closed')" class="oe_highlight"/>
+                    <button name="action_close_voting" type="object" string="Cerrar Votación" invisible="voting_process_status in ('draft', 'closed')" class="oe_highlight"/>
+                    <field name="voting_process_status" widget="statusbar" statusbar_visible="draft,in_progress,closed" />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" readonly="voting_process_status != 'draft'"/>
+                        <h1>
+                            <field name="name" placeholder="Ej: Votación Estudiantil" required="1" readonly="voting_process_status != 'draft'"/>
+                        </h1>
+                    </div>
+                    <group string="Detalles de la votación">
+                        <field name="description" readonly="voting_process_status != 'draft'"/>
+                        <field name="voting_start" readonly="voting_process_status != 'draft'"/>
+                        <field name="voting_end" readonly="voting_process_status != 'draft'"/>
+                        <field name="total_votes" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Candidatos">
+                            <field name="voting_line_ids" readonly="voting_process_status != 'draft'">
+                                <list editable="bottom">
+                                    <field name="candidate_id"/>
+                                    <field name="candidate_photo" widget="image" options="{'size': [80, 80]}" class="bg-view" />
+                                    <field name="vote_count"/>
+                                    <field name="voter_ids" sum="Total votos"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_voting_process" model="ir.actions.act_window">
+        <field name="name">Procesos de votación</field>
+        <field name="res_model">uniacme_votes.voting_process</field>
+        <field name="path">voting-process</field>
+        <field name="view_mode">list,form,pivot</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No hay procesos de votación creados.</p>
+        </field>
+    </record>
+    
+
+    <record id="action_voting_process_result" model="ir.actions.act_window">
+        <field name="name">Resultados de votación</field>
+        <field name="res_model">uniacme_votes.voting_process_line</field>
+        <field name="path">voting-process-result</field>
+        <field name="view_mode">pivot</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No hay resultados de votación creados.</p>
+        </field>
+    </record>
+</odoo>

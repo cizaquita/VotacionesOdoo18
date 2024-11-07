@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Action Submenú Listado de Estudiantes -->
+    <record id="action_res_partner_students" model="ir.actions.act_window">
+        <field name="name">Listado de Estudiantes</field>
+        <field name="res_model">res.partner</field>
+        <field name="path">voting-students</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_student', '=', True)]</field>
+        <field name="context">{'search_default_is_student': 1, 'default_is_student': True}</field>
+        
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay estudiantes creados.
+            </p>
+        </field>
+    </record>
+    
+    <!-- Action Submenú Listado de Candidatos -->
+    <record id="action_res_partner_candidates" model="ir.actions.act_window">
+        <field name="name">Listado de Candidatos</field>
+        <field name="res_model">res.partner</field>
+        <field name="path">voting-candidates</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_candidate', '=', True)]</field>
+        <field name="context">{'search_default_is_candidate': 1, 'default_is_candidate': True}</field>
+        
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay candidatos creados.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menú principal -->
+    <menuitem
+        id="uniacme_votes_menu_root"
+        name="UNIACME"
+        web_icon="uniacme_votes,static/description/icon.png"
+        action="uniacme_votes.action_voting_process"
+        sequence="255"/>
+
+    <!-- Menú Votaciones -->
+    <menuitem id="menu_voting_root" name="Votaciones" sequence="100" parent="uniacme_votes.uniacme_votes_menu_root"/>
+    <!-- Menú ResPartner -->
+    <menuitem id="menu_users_root" name="Usuarios" sequence="110" parent="uniacme_votes.uniacme_votes_menu_root"/>
+    <!-- Menú Sedes -->
+    <menuitem id="menu_campus_root" name="Sedes" sequence="120" parent="uniacme_votes.uniacme_votes_menu_root"/>
+    <!-- Menú Resultados -->
+    <menuitem id="menu_result_root" name="Resultados" sequence="130" parent="uniacme_votes.uniacme_votes_menu_root" action="uniacme_votes.action_voting_process_result"/>
+    <!-- Menú Wizard -->
+    <menuitem id="menu_wizard_root" name="Importar Procesos" sequence="140" parent="uniacme_votes.uniacme_votes_menu_root" action="uniacme_votes.action_voting_process_importer_wizard"/>
+
+    <!-- Submenús Votaciones -->
+    <menuitem id="menu_voting_process" name="Listado de Procesos de votación" parent="uniacme_votes.menu_voting_root" action="uniacme_votes.action_voting_process"/>
+    <!-- Submenús ResPartner-->
+    <menuitem id="menu_users_students" name="Listado de Estudiantes" parent="uniacme_votes.menu_users_root" action="uniacme_votes.action_res_partner_students"/>
+    <menuitem id="menu_users_candidates" name="Listado de Candidatos" parent="uniacme_votes.menu_users_root" action="uniacme_votes.action_res_partner_candidates"/>
+    <!-- Submenús Sedes -->
+    <menuitem id="menu_campus" name="Listado de Sedes" parent="uniacme_votes.menu_campus_root" action="uniacme_votes.action_campus_list"/>
+    
+</odoo>
+

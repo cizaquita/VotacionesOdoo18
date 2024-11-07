@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Página de inicio de sesión para estudiantes -->
+    <template id="voting_login_template" name="Voting Login Page">
+        <t t-call="web.frontend_layout">
+            <div class="container mt-5">
+                <h2>Ingreso a votaciones</h2>
+                <form action="/voting/authenticate" method="post">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="form-group">
+                        <label for="id_number">Número de Documento:</label>
+                        <input type="text" name="id_number" id="id_number" class="form-control" required="required"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Ingresar</button>
+                </form>
+            </div>
+        </t>
+    </template>
+
+    <!-- Página para seleccionar votación -->
+    <template id="voting_select_template" name="Voting Select Page">
+        <t t-call="web.frontend_layout">
+            <div class="container mt-5">
+                <h3>Listado de votaciones en proceso</h3>
+
+                <div class="alert alert-info d-flex justify-content-between">
+                    <strong>Bienvenido/a,</strong> <span style="margin-left: 5px;"></span> <t t-esc="student.display_name"/> 
+                    <a href="/voting/login" class="btn btn-primary ms-auto">Salir</a>
+                </div>
+
+                <t t-if="voting_processes">
+                    <t t-foreach="voting_processes" t-as="voting">
+                    
+                        <div class="accordion" t-att-id="'votingAccordion_'+str(voting.id)">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" t-att-id="'heading_1'+str(voting.id)">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" 
+                                            t-att-data-bs-target="'#collapse_'+str(voting.id)"
+                                            aria-expanded="true" t-att-aria-controls="'collapse_'+str(voting.id)">
+                                        <t t-esc="voting.name"/>
+                                    </button>
+                                </h2>
+                                <div t-att-id="'collapse_'+str(voting.id)"
+                                    class="accordion-collapse collapse"
+                                    t-att-aria-labelledby="'heading_'+str(voting.id)"
+                                    t-att-data-bs-parent="'#votingAccordion_'+str(voting.id)">
+
+                                    <div class="accordion-body">
+                                    
+                                        <form action="/voting/submit" method="post">
+                                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                            <input type="hidden" name="voting_process_id" t-att-value="voting.id"/>
+                                            
+                                            <t t-foreach="voting.voting_line_ids" t-as="voting_line">
+                                                <div class="candidate-container d-flex align-items-center mb-4">
+                                                    <!-- Imagen del candidato -->
+                                                    <div t-attf="id=candidate-image-container_{voting_line.id}" class="candidate-image text-center">
+                                                        <img t-attf="id=candidate-image_{voting_line.id}" 
+                                                            t-att-src="'/voting/image/' + str(voting_line.id)" 
+                                                            alt="Foto del candidato" 
+                                                            class="img-thumbnail" 
+                                                            style="max-width: 150px; max-height: 150px;" />
+                                                    </div>
+
+                                                    <!-- Información del candidato y opción de votación -->
+                                                    <div class="candidate-info ms-3">
+                                                        <div class="form-group">
+                                                            <label t-att-for="radio_id">
+                                                                <t t-esc="voting_line.candidate_id.display_name"/>
+                                                            </label>
+                                                            <input type="radio"
+                                                                t-att-id="radio_id"
+                                                                t-att-name="'radio_candidate_selected_id_' + str(voting.id)" 
+                                                                t-att-value="voting_line.candidate_id.id" 
+                                                                required="required"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </t>
+
+                                            <!-- Botón de voto -->
+                                            <div class="text-center mt-3">
+                                                <button type="submit" class="btn btn-success">Votar</button>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+                <t t-else="">
+                    <p>No hay votaciones en proceso disponibles en este momento.</p>
+                    <a href="/voting/login" class="btn btn-primary mt-3">Volver a la página principal</a>
+                </t>
+            </div>
+        </t>
+    </template>
+
+
+    <!-- Página de confirmación de voto -->
+    <template id="voting_confirmation_template" name="Voting Confirmation Page">
+        <t t-call="web.frontend_layout">
+            <div class="container mt-5 text-center">
+                <h2>¡Gracias por tu voto!</h2>
+                <p>Tu participación en la votación ha sido registrada con éxito.</p>
+                <a href="/voting/login" class="btn btn-primary mt-3">Volver a la página principal</a>
+                <a href="/voting/select" class="btn btn-secondary mt-3">Volver al listado de votaciones</a>
+            </div>
+        </t>
+    </template>
+
+    
+    <!-- Página de error de voto -->
+    <template id="voting_error_template" name="Voting Error Page">
+        <t t-call="web.frontend_layout">
+            <div class="container mt-5 text-center">
+                <h2>Error en la votación</h2>
+                <p>Ocurrió un error, intente nuevamente.</p>
+                <a href="/voting/login" class="btn btn-primary mt-3">Volver a la página principal</a>
+            </div>
+        </t>
+    </template>
+</odoo>

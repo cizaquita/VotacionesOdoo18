@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista de lista (tree) para el modelo campus -->
+    <record id="view_campus_tree" model="ir.ui.view">
+        <field name="name">campus.tree</field>
+        <field name="model">uniacme_votes.campus</field>
+        <field name="arch" type="xml">
+            <list string="Lista de Sedes">
+                <field name="name"/>
+                <field name="timezone"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vista de formulario (form) para el modelo campus -->
+    <record id="view_campus_form" model="ir.ui.view">
+        <field name="name">campus.form</field>
+        <field name="model">uniacme_votes.campus</field>
+        <field name="arch" type="xml">
+            <form string="Sede">
+                <sheet>
+                    <group>
+                        <field name="name" string="Nombre de la sede" required="1"/>
+                        <field name="description" string="Descripción de la sede"/>
+                        <field name="timezone" string="Zona horaria"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción para abrir la vista de lista de campus -->
+    <record id="action_campus_list" model="ir.actions.act_window">
+        <field name="name">Listado de Sedes</field>
+        <field name="res_model">uniacme_votes.campus</field>
+        <field name="path">voting-campus</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_campus_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay sedes creadas.
+            </p>
+        </field>
+    </record>
+
+</odoo>
