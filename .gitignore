@@ -1,0 +1,53 @@
+# Archivos de Python compilados
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entornos virtuales
+venv/
+.venv/
+env/
+.env/
+ENV/
+*.env
+
+# Configuraciones del entorno de desarrollo
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Archivos de configuración de dependencias
+Pipfile
+Pipfile.lock
+poetry.lock
+
+# Archivos de base de datos y migraciones
+*.sqlite3
+db.sqlite3
+migrations/
+
+# Archivos de Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Configuración de logs
+*.log
+
+# Archivos creados por el sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos y directorios generados por tests
+.pytest_cache/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Compilación
+build/
+dist/
+*.egg-info/
+.eggs/
