@@ -1,4 +1,5 @@
 {
+    'author': 'Cristian I. Izaquita M. - @Cizaquita',
     'name': 'UNIACME',
     'version': '1.0',
     'category': 'Human Resources',
