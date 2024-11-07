@@ -9,6 +9,8 @@
     'summary': 'Voting system for UNIACME',
     'description': """
                         This module manages voting workflow
+                        
+                        https://www.youtube.com/watch?v=cKupie_xaHo
                     """,
     'depends': ['web', 'base_setup', 'mail'],
     'data': [
